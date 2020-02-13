@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -e
+
+. common.sh
+
+CLEANUP=( )
+
+trap cleanup EXIT
+
+# execute cleanups
+cleanup
+trap - EXIT
+
+exit 0

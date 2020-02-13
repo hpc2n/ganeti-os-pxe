@@ -1,0 +1,26 @@
+#!/bin/bash
+
+set -e
+
+. common.sh
+
+CLEANUP=( )
+
+trap cleanup EXIT
+
+function eprint() {
+	echo "ERROR: $@" >&2
+	exit 1
+}
+
+if [ -b $EXPORT_DEVICE ]; then
+	dd if=$EXPORT_DEVICE bs=4K | zstd -5 -T4 || eprint "writing export-file failed"
+else
+	eprint "Device $EXPORT_DEVICE not found"
+fi
+
+# execute cleanups
+cleanup
+trap - EXIT
+
+exit 0

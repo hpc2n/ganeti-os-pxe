@@ -1,0 +1,22 @@
+#!/bin/bash
+
+set -e
+
+set -x 
+
+. common.sh
+
+CLEANUP=( )
+
+trap cleanup EXIT
+
+# whipe any previous headers, or else things might get confused when it finds vgs..
+dd if=/dev/zero of=$DISK_0_PATH conv=nocreat,notrunc bs=1M count=128
+# deploy a bootloader wo boots the network, thus a network install =)
+dd if=eb-git-virtio-net.zhd of=$DISK_0_PATH conv=nocreat,notrunc
+
+# execute cleanups
+cleanup
+trap - EXIT
+
+exit 0

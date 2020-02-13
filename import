@@ -1,0 +1,26 @@
+#!/bin/bash
+
+set -e
+
+. common.sh
+
+CLEANUP=( )
+
+trap cleanup EXIT
+
+function eprint() {
+	echo "ERROR: $@" >&2
+	exit 1
+}
+
+if [ -b $IMPORT_DEVICE ]; then
+	zstd -dc | dd of=$IMPORT_DEVICE bs=4K || eprint "writing to $IMPORT_DEVICE failed"
+else
+	eprint "Disk $IMPORT_DEVICE not found"
+fi
+
+# execute cleanups
+cleanup
+trap - EXIT
+
+exit 0
