@@ -32,6 +32,20 @@ class "etherbootclients" {
 }
 ```
 
+# Serial console note
+
+While this isn't specific to this OS definition, Ganeti/KVM instances don't have the VGA-to-serial redirection that regular servers has, and thus requires serial console/output to be enabled in order to get any output in the `gnt-instance console` session.
+
+This is done differently depending on bootloader, OS, etc.
+
+For the pxelinux bootloader, serial console is enabled by adding the following to the pxelinux.cfg template:
+```
+serial 0 115200
+```
+
+For Linux operating systems you want an end result that ends up with `console=ttyS0,115200n8` or similar included in the kernel poot parameter list.
+
+
 # eb-git-virtio-net.zhd
 
 This file is an Etherboot file downloaded from rom-o-matic.net at some point in time...
